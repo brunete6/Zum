@@ -21,7 +21,12 @@ public class manejoUsu {
 		
 		
 	}
-	
+
+	public static Usuario obtenerUsuario(int ci) {
+		
+		return usaurio.obtenerUsuario(ci);
+		
+	}
 	
 public static ArrayList<Usuario> obtenerTodosClientesf(){
 		
@@ -45,10 +50,10 @@ public static boolean existeUsuario(int id){
 		
 	
 }
-public static void UpdateUser(Usuario a) throws SQLException {
-	System.out.println("Ejecuto");
-	usaurio.UpdateUsuario(a);
-	System.out.println("termino");
+public static boolean UpdateUser(Usuario a) throws SQLException {
+	
+	return usaurio.UpdateUsuario(a);
+
 }
 
 	

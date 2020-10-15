@@ -24,17 +24,23 @@ public class usaurio {
 			e.printStackTrace();
 		}
 	}
-	public static void UpdateUsuario(Usuario a) throws SQLException{
-		UpdateUsuario.setInt(7, a.getId());
-		UpdateUsuario.setString(1,a.getNombre());
-		UpdateUsuario.setString(2,a.getApellido());
-		UpdateUsuario.setString(3, a.getCorroe());
-		UpdateUsuario.setString(4,a.getMetodop());
-		UpdateUsuario.setString(5,a.getTelefono());
-		UpdateUsuario.setBoolean(6,a.isEstado());
-		UpdateUsuario.executeQuery();
-		UpdateUsuario.close();
-		
+	public static boolean UpdateUsuario(Usuario a) throws SQLException{
+		try {
+			UpdateUsuario.setInt(7, a.getId());
+			UpdateUsuario.setString(1,a.getNombre());
+			UpdateUsuario.setString(2,a.getApellido());
+			UpdateUsuario.setString(3, a.getCorroe());
+			UpdateUsuario.setString(4,a.getMetodop());
+			UpdateUsuario.setString(5,a.getTelefono());
+			UpdateUsuario.setBoolean(6,a.isEstado());
+			UpdateUsuario.executeQuery();
+			UpdateUsuario.close();
+		}
+
+	 catch (SQLException e) {
+		 return false;
+	 }
+		return true;
 	}
 
 	public static void guardarCliente(Usuario u ) throws SQLException {
@@ -90,13 +96,16 @@ public class usaurio {
 		Usuario resultado = null;
 
 		try {
+			System.out.println("Realizo consutla");
+			System.out.println(id);
 			consultaUsuario.setInt(1, id);
 			ResultSet resultadoConsulta = consultaUsuario.executeQuery();
-			consultaUsuario.close();
-
+			System.out.println("traigo resultado");
 			if (resultadoConsulta.next()) {
-
+				System.out.println("traigo resultado2");
+				
 				String nombre = resultadoConsulta.getString(2);
+				System.out.println(nombre);
 				String apellido = resultadoConsulta.getString(3);
 				String correo = resultadoConsulta.getString(4);
 				String metodo = resultadoConsulta.getString(5);
@@ -106,17 +115,15 @@ public class usaurio {
 				if (Estado.equals("0")) {
 					estado=false;
 				}
-				
-
-
 				resultado = new Usuario(id, nombre, apellido,correo,metodo,telefono,estado);
-
+				consultaTodosClientes.close();
 			}
-
+			
 		} catch (SQLException e) {
+			System.out.println("No realizo busqueda");
 
 		}
-
+	
 		return resultado;
 
 	}

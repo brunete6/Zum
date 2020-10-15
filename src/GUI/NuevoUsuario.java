@@ -171,6 +171,9 @@ public class NuevoUsuario extends JFrame {
 			txtApellido.setText("");
 			txtNombre.setText("");
 			txtci.setText("");
+			txtci.setEditable(true);
+			btnModificar.setEnabled(false);
+			btnNuevo.setEnabled(true);
 			
 		 }  
 		 }); 
@@ -193,8 +196,29 @@ public class NuevoUsuario extends JFrame {
 	private JButton Buscar() {
 		btnBuscar= new JButton("Buscar");
 		btnBuscar.setBounds(380, 30, 150, 35);
-		btnBuscar.addActionListener(new ActionListener() {   public void actionPerformed(ActionEvent e) {
-			dispose();
+		btnBuscar.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			int ci=0;
+			try{
+				 ci = Integer.parseInt(txtci.getText().trim());
+			} catch (Exception e1){
+				JOptionPane.showMessageDialog(Jframe, "La CI debe ser un número entero.", "Datos incorrectos!",
+						JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			if(manejoUsu.existeUsuario(ci)) {
+				Usuario res = manejoUsu.obtenerUsuario(ci);
+				txtTelefono.setText(res.getTelefono());
+				txtCorreo.setText(res.getCorroe());
+				txtApellido.setText(res.getApellido());
+				txtNombre.setText(res.getNombre());
+				txtci.setEditable(false);
+				btnModificar.setEnabled(true);
+				btnNuevo.setEnabled(false);
+				
+			}
+			
+			
 		 }  
 		 }); 
 
@@ -205,13 +229,14 @@ public class NuevoUsuario extends JFrame {
 	private JButton Modificar() {
 		btnModificar= new JButton("Modificar");
 		btnModificar.setBounds(380, 90, 150, 35);
+		btnModificar.setEnabled(false);
 		btnModificar.addActionListener(new ActionListener() {   public void actionPerformed(ActionEvent e) {
 			String nombre = txtNombre.getText();			
 			String Apellido = txtApellido.getText().trim();	
 			String Correo = txtCorreo.getText().trim();
 			String Telefono = txtTelefono.getText().trim();
-			
-			
+			int ci=0;
+			ci = Integer.parseInt(txtci.getText().trim());
 			boolean estado=false;
 			if (radioActivo.isSelected()) {
 				estado=true;
@@ -224,18 +249,21 @@ public class NuevoUsuario extends JFrame {
 			}else{
 					Usuario result = new Usuario(ci,nombre,Apellido,Correo,res,Telefono,estado);
 					try {
-						if(manejoUsu.AgregarUsuario(result)) {
-							JOptionPane.showMessageDialog(Jframe, "Se agrego correctamente el usuario" + nombre, "Ingreso Correcto",JOptionPane.INFORMATION_MESSAGE);	
+						if(manejoUsu.UpdateUser(result)) {
+							JOptionPane.showMessageDialog(Jframe, "Se Modifico correctamente el usuario" + nombre, "Ingreso Correcto",JOptionPane.INFORMATION_MESSAGE);	
 							Limpiar();
+							txtci.setEditable(true);
+							btnNuevo.setEnabled(true);
 						}else {
-							JOptionPane.showMessageDialog(Jframe, "No se pudo agregar el usuario", "ERROR FATAL!",JOptionPane.ERROR_MESSAGE);		
+							JOptionPane.showMessageDialog(Jframe, "No se pudo modificar el usuario", "ERROR FATAL!",JOptionPane.ERROR_MESSAGE);		
 						}
 					}catch (SQLException e1) {
-						JOptionPane.showMessageDialog(Jframe, e1, "Error al Agregar!",JOptionPane.WARNING_MESSAGE);
+						JOptionPane.showMessageDialog(Jframe, e1, "Error al Modificar!",JOptionPane.WARNING_MESSAGE);
 						e1.printStackTrace();
 				
 			}
 		}
+			
 		 }  
 		 }); 
 
